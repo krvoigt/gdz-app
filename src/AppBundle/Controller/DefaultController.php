@@ -226,6 +226,13 @@ class DefaultController extends BaseController
         $facets = $client->select($select)->getFacetSet()->getFacets();
         $facetCounter = $this->get('subugoe_find.query_service')->getFacetCounter($activeFacets);
 
+        $selectParentDocument = $client->createSelect()
+                 ->setQuery(sprintf('id:%s', $id));
+        $parentDocument = $client
+                 ->select($selectParentDocument)
+                 ->getDocuments()[0]
+                 ->getFields();
+
         $selectChildrenDocuments = $client->createSelect()->setRows((int) 500);
 
         if (isset($sort) && !empty($sort)) {
@@ -243,6 +250,7 @@ class DefaultController extends BaseController
                     'queryParams' => $request->get('filter') ?: [],
                     'search' => $search,
                     'pagination' => $pagination,
+                    'parentDocument' => $parentDocument,
                 ]);
     }
 

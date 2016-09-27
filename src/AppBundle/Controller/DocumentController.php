@@ -18,7 +18,7 @@ class DocumentController extends Controller
 
         $selectParentDocument = $client->createSelect()
                 ->setQuery(sprintf('id:%s', $id));
-        $parentDocument = $this->get('solarium.client')
+        $parentDocument = $client
                 ->select($selectParentDocument)
                 ->getDocuments()[0]
                 ->getFields();

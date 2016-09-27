@@ -32,6 +32,48 @@
 {% endblock %}
 
 {% block content %}
+
+    {% if parentDocument is defined %}
+        <h2 class="viewer_heading">{{ 'Metadata'|trans }}</h2>
+        <div>
+            <ul>
+                <li>{{ 'docstrct' | transchoice(1) }}: {{ parentDocument.docstrct | trans }}</li>
+                <li>{{ 'bytitle'|trans }}: {{ parentDocument.title | first }}</li>
+
+                {% if parentDocument.creator is defined %}
+                    <li>{{ 'creator' | transchoice(parentDocument.creator | length) }}
+                        {% for author in parentDocument.creator %}
+                            <a href="{{ path('_homepage', {'filter': {0: {'facetcreator': author}}}) }}">{{ author }}</a>{% if loop.last %}{% else %}, {% endif %}
+                        {% endfor %}
+                    </li>
+                {% endif %}
+
+                <li>{{ 'yearpublish' | transchoice(1) }}: {{ parentDocument.yearpublish }}</li>
+
+                {% if parentDocument.placepublish is defined %}
+                    <li>{{ 'placepublish' | transchoice(parentDocument.placepublish | length) }}: {{ parentDocument.placepublish|join(', ') }}</li>
+                {% endif %}
+
+                {% if parentDocument.publisher is defined %}
+                    <li>{{ 'publisher' | transchoice(parentDocument.publisher | length) }}: {{ parentDocument.publisher|join(', ') }}</li>
+                {% endif %}
+
+                {% if parentDocument.dc is defined %}
+                    <li>{{ 'dc' | transchoice(parentDocument.dc | length) }}:
+                    {% for dc in parentDocument.dc %}
+                        <a href="{{ path('_collection', {id: dc}) }}">{{ dc | trans }}</a>{% if loop.last %}{% else %}, {% endif %}
+                    {% endfor %}
+                    </li>
+                {% endif %}
+
+                <li>DFG-Viewer<br><a class="dfgviewer-link" href="http://dfg-viewer.de/show/?set[mets]={{ url('_mets', {id: parentDocument.id}) }}" target="_blank"><img class="metadata_dfg-viewer" src="{{ asset("images/dfg-viewer.gif") }}" alt="DFG-Viewer {{ parentDocument.title | first }}"></a></li>
+                <li>Mets<br><a href="{{ url('_mets', {id: parentDocument.id}) }}" target="_blank">{{ url('_mets', {id: parentDocument.id}) }}</a></li>
+                <li>{{ 'PURL'|trans }}<br><a href="{{ parentDocument.purl }}" target="_blank">{{ parentDocument.purl }}</a> </li>
+                <li>{{ 'Catalogue'|trans }}<br><a href="http://opac.sub.uni-goettingen.de/DB=1/PPN?PPN={{ parentDocument.id_PPNanalog_s.0 | replace({'PPN': ''}) }}" target="_blank">http://opac.sub.uni-goettingen.de/DB=1/PPN?PPN={{ parentDocument.id_PPNanalog_s.0 | replace({'PPN': ''}) }}</a></li>
+            </ul>
+        </div>
+    {% endif %}
+
     <ol class="result_list" start="{{ search.offset + 1 }}">
         {% for result in pagination %}
             <li class="result_item">
