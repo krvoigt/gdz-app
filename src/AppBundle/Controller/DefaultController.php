@@ -112,6 +112,11 @@ class DefaultController extends BaseController
             $tableOfContents = count($structure[0]) > 0 ? true : false;
         }
 
+        if (isset($pageMappings) && $pageMappings !== []) {
+            $documentFirstPage = array_keys($pageMappings)[0];
+            $documentLastPage = array_keys($pageMappings)[count($pageMappings) - 1];
+        }
+
         if (isset($structure[0]) && count($structure[0]) > 0) {
             $chapterArr = $this->flattenStructure(array_filter($structure[0]));
             $firstChapter = $chapterArr[0]['chapterId'];
@@ -147,19 +152,19 @@ class DefaultController extends BaseController
             if ($page !== 1 && !empty($activeChapterFirstPage) && $page <= $activeChapterFirstPage && isset($previousChapterId)) {
                 $previousPageChapterId = $previousChapterId;
             } else {
-                $previousPageChapterId = $this->getChapterId($chapterArr, $page - 1);
+                $previouspage = intval($page - 1);
+                $previousPageChapterId = $this->getChapterId($chapterArr, $previouspage);
             }
 
             if (isset($activeChapterLastPage) && $page >= $activeChapterLastPage && isset($nextChapterId)) {
                 $nextPageChapterId = $nextChapterId;
             } else {
-                $nextPageChapterId = $this->getChapterId($chapterArr, $page + 1);
+                $nextPage = intval($page + 1);
+                if (isset($documentLastPage) && !empty($documentLastPage) && $nextPage === $documentLastPage) {
+                    $nextPage = $page;
+                }
+                $nextPageChapterId = $this->getChapterId($chapterArr, $nextPage);
             }
-        }
-
-        if (isset($pageMappings) && $pageMappings !== []) {
-            $documentFirstPage = array_keys($pageMappings)[0];
-            $documentLastPage = array_keys($pageMappings)[count($pageMappings) - 1];
         }
 
         $isValidPage = ($page >= 1 and $page <= $pageCount) ? true : false;
@@ -313,7 +318,7 @@ class DefaultController extends BaseController
             $chapterFirstPage = ltrim(explode('_', $chapter['chapterFirstPage'])[1], 0);
             $chapterLastPage = ltrim(explode('_', $chapter['chapterLastPage'])[1], 0);
 
-            if (in_array($page, range($chapterFirstPage, $chapterLastPage)) && $page !== $chapterLastPage) {
+            if (in_array($page, range($chapterFirstPage, $chapterLastPage))) {
                 $chapterId = $chapter['chapterId'];
 
                 return $chapterId;
