@@ -39,7 +39,7 @@
             <select class="viewer_control -page-select" name="page" id="viewer-page-select">
                 {% for physPage, logPage in pageMappings %}
                     <option value={{ physPage }} {{ physPage == documentStructure.page ? 'selected' }}>
-                        {{ physPage }} : {{ logPage }}
+                        {{ physPage }} : {{ logPage|trans }}
                     </option>
                 {% endfor %}
             </select>
