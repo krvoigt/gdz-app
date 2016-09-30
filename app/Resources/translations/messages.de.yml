@@ -247,7 +247,7 @@ Go back: Zurück
 pdf_first_step_option1: Mittlere Qualität (1000 Pixel Breite pro Bild)
 pdf_first_step_option2: Originale Scanauflösung
 pdf_first_step_option3: "Breite selbst wählen:"
-Selected too many pages - get full document: Bei über 200 ausgewählten Seiten wird das vollständige, vorgenerierte Dokument heruntergeladen, was deutlich schneller geht als ein Teildokument neu zu erstellen.
+Selected too many pages - get full document: Bei über 100 ausgewählten Seiten wird das vollständige, vorgenerierte Dokument heruntergeladen, was deutlich schneller geht als ein Teildokument neu zu erstellen.
 
 Page range: Seitenbereich
 pdf_until: bis
